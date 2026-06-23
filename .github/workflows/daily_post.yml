@@ -1,0 +1,32 @@
+name: Daily LinkedIn News Post
+
+on:
+  schedule:
+    - cron: '15 3 * * *'  # 9 AM Nepal time (UTC+5:45)
+  workflow_dispatch:  # allows manual trigger too
+
+jobs:
+  post-news:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install feedparser newspaper3k requests lxml_html_clean
+        pip install sentence-transformers chromadb groq numpy
+
+    - name: Run pipeline and post to LinkedIn
+      env:
+        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+        LINKEDIN_USER_ID: ${{ secrets.LINKEDIN_USER_ID }}
+      run: |
+        python app/rag/daily_post.py
