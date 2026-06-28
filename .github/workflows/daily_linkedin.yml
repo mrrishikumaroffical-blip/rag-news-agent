@@ -1,0 +1,60 @@
+name: Daily LinkedIn Posts
+
+on:
+  schedule:
+    - cron: "15 3 * * *"   # 9:00 AM Nepal - Morning post
+    - cron: "15 11 * * *"  # 5:00 PM Nepal - Evening post
+    - cron: "15 15 * * *"  # 9:00 PM Nepal - Night post
+  workflow_dispatch:
+
+jobs:
+  morning-post:
+    if: github.event.schedule == '15 3 * * *' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install feedparser requests groq
+      - name: Run morning post
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_USER_ID: ${{ secrets.LINKEDIN_USER_ID }}
+        run: python app/rag/morning_post.py
+
+  evening-post:
+    if: github.event.schedule == '15 11 * * *'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install feedparser requests groq
+      - name: Run evening post
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_USER_ID: ${{ secrets.LINKEDIN_USER_ID }}
+        run: python app/rag/evening_post.py
+
+  night-post:
+    if: github.event.schedule == '15 15 * * *'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install feedparser requests groq
+      - name: Run night post
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_USER_ID: ${{ secrets.LINKEDIN_USER_ID }}
+        run: python app/rag/night_post.py
