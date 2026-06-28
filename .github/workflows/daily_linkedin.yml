@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: '3.10'
       - name: Install dependencies
-        run: pip install feedparser requests groq
+        run: pip install feedparser requests
       - name: Run morning post
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
@@ -34,7 +34,7 @@ jobs:
         with:
           python-version: '3.10'
       - name: Install dependencies
-        run: pip install feedparser requests groq
+        run: pip install feedparser requests
       - name: Run evening post
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
@@ -51,7 +51,7 @@ jobs:
         with:
           python-version: '3.10'
       - name: Install dependencies
-        run: pip install feedparser requests groq
+        run: pip install feedparser requests
       - name: Run night post
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
