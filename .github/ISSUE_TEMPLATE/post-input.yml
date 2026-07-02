@@ -1,0 +1,39 @@
+name: Post input
+description: Raw notes for your next LinkedIn post
+title: "[Post] "
+labels: ["post-input"]
+body:
+  - type: dropdown
+    id: pillar
+    attributes:
+      label: Post type
+      options:
+        - Build Log
+        - Industry Take
+        - Build-in-Public
+        - Pivot Story
+        - Weekly Wrap
+    validations:
+      required: true
+  - type: textarea
+    id: did
+    attributes:
+      label: What did you do or learn?
+      description: Skip this if you picked Industry Take.
+      placeholder: e.g. Learned JOINs today. Spent 40 min stuck on a LEFT JOIN giving duplicate rows.
+    validations:
+      required: false
+  - type: textarea
+    id: hard
+    attributes:
+      label: What was hard or surprising? (optional)
+      placeholder: e.g. Figuring out why the duplicates showed up.
+    validations:
+      required: false
+  - type: textarea
+    id: take
+    attributes:
+      label: Your take or opinion
+      placeholder: e.g. Reminds me of checking subject-verb agreement when I taught grammar.
+    validations:
+      required: true
