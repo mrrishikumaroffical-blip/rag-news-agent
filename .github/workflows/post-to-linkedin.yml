@@ -1,0 +1,43 @@
+name: Post to LinkedIn
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'post-input')
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install groq requests
+      
+      - name: Process and post
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+        run: python scripts/post_generator.py
+      
+      - name: Close issue
+        if: success()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed'
+            })
